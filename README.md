@@ -1,7 +1,9 @@
 # Animated Dropdown Menu
 
 This is just an example of an animated dropdown menu with nested submenus and animation transition between submenus.
-
+<p align="center">
+<img src="./drop-down.gif" />
+</p>
 It's written in Typescript and missing just a few types related to **react-transition-group** due to lack of documentation
 
 ## How to use?
