@@ -1,5 +1,6 @@
-import React, { ComponentProps, useState, useRef } from 'react';
+import React, { ComponentProps, useState, useRef, ReactElement, useEffect } from 'react';
 import { CSSTransition } from 'react-transition-group'
+import {FiChevronLeft} from 'react-icons/fi'
 
 function App() {
   return (
@@ -15,6 +16,23 @@ function App() {
   );
 }
 
+// function useOutsideAlerter(ref: any) {
+//   useEffect(() => {
+//     function handleClickOutside(event: any) {
+//       if (ref.current && !ref.current.contains(event.target)) {
+//         alert("You clicked outside of me!");
+//       }
+//     }
+
+//     // Bind the event listener
+//     document.addEventListener("mousedown", handleClickOutside);
+//     return () => {
+//       // Unbind the event listener on clean up
+//       document.removeEventListener("mousedown", handleClickOutside);
+//     };
+//   }, [ref]);
+// }
+
 const Navbar: React.FC = (props) => {
   return (
     <nav className="navbar">
@@ -29,6 +47,21 @@ interface NavItemProps extends ComponentProps<any> {
 
 const NavItem: React.FC<NavItemProps> = (props) => {
   const [open, setOpen] = useState(false);
+  // const ref = useRef<HTMLObjectElement>(null)
+
+  // const handleClickOutside = (event: any) => {
+  //   if (ref.current && !ref.current?.contains(event.target)) {
+  //     console.log('called?')
+  //     setOpen(false);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   document.addEventListener('click', handleClickOutside, true);
+  //   return () => {
+  //     document.removeEventListener('click', handleClickOutside, true)
+  //   }
+  // })
 
   return (
     <li className="nav-item">
@@ -42,15 +75,16 @@ const NavItem: React.FC<NavItemProps> = (props) => {
 }
 
 interface DropdownItemProps extends ComponentProps<any> {
-  leftIcon?: string;
-  rightIcon?: string;
+  leftIcon?: string | ReactElement;
+  rightIcon?: string | ReactElement;
   goToMenu?: string;
 }
 
-const DropdownMenu: React.FC = () => {
+const DropdownMenu: React.FC = (props) => {
   const [activeMenu, setActiveMenu] = useState('main')
   const [menuHeight, setMenuHeight] = useState();
   const dropdownRef = useRef(null)
+  // const {ref, isComponentVisible} = useComponentVisible(true);
 
   const calcHeight = (el: any) => {
     const height = el.offsetHeight
@@ -66,17 +100,18 @@ const DropdownMenu: React.FC = () => {
       </a>
     )
   }
+  // const wrapperRef = useRef(null)
+  // useOutsideAlerter(wrapperRef)
+
 
   return (
     <div className="dropdown" style={{ height: menuHeight }} ref={dropdownRef} >
-
-      <CSSTransition
+        <CSSTransition
         in={activeMenu === 'main'}
         timeout={500}
         classNames="menu-primary"
         unmountOnExit
         onEnter={calcHeight}
-        addEndListener={() => { }}
       >
         <div className="menu">
           <DropdownItem leftIcon="👹" rightIcon="👽">My Profile</DropdownItem>
@@ -95,10 +130,9 @@ const DropdownMenu: React.FC = () => {
         classNames="menu-secondary"
         unmountOnExit
         onEnter={calcHeight}
-        addEndListener={() => { }}
       >
         <div className="menu">
-          <DropdownItem goToMenu="main" leftIcon="‹">
+          <DropdownItem goToMenu="main" leftIcon={<FiChevronLeft />}>
             <h2>Settings</h2>
           </DropdownItem>
           <DropdownItem leftIcon="👹" rightIcon="👽">My Profile</DropdownItem>
@@ -113,7 +147,7 @@ const DropdownMenu: React.FC = () => {
         unmountOnExit
         onEnter={calcHeight}>
         <div className="menu">
-          <DropdownItem goToMenu="main" leftIcon="‹">
+        <DropdownItem goToMenu="main" leftIcon={<FiChevronLeft />}>
             <h2>Animals</h2>
           </DropdownItem>
           <DropdownItem leftIcon="🦘">Kangaroo</DropdownItem>
@@ -122,7 +156,8 @@ const DropdownMenu: React.FC = () => {
           <DropdownItem leftIcon="🦔">Hedgehog</DropdownItem>
         </div>
       </CSSTransition>
-    </div>
+</div>
+
   )
 }
 
